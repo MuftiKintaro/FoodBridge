@@ -1,0 +1,43 @@
+{
+  "expo": {
+    "name": "FoodBridge",
+    "slug": "foodbridge",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.foodbridge.app",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "FoodBridge memerlukan akses lokasi untuk mencocokkan surplus makanan terdekat dan melacak rute pengantaran."
+      }
+    },
+    "android": {
+      "package": "com.foodbridge.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ],
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "FoodBridge memerlukan akses lokasi untuk mencocokkan surplus makanan terdekat dan melacak rute pengantaran."
+        }
+      ],
+      "expo-font"
+    ],
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
