@@ -10,7 +10,9 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.foodbridge.app",
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "FoodBridge memerlukan akses lokasi untuk mencocokkan surplus makanan terdekat dan melacak rute pengantaran."
+        "NSLocationWhenInUseUsageDescription": "FoodBridge memerlukan akses lokasi untuk mencocokkan surplus makanan terdekat dan melacak rute pengantaran.",
+        "NSCameraUsageDescription": "FoodBridge memerlukan akses kamera untuk mengambil foto bukti serah-terima surplus makanan dan verifikasi identitas penerima.",
+        "NSPhotoLibraryUsageDescription": "FoodBridge memerlukan akses galeri untuk memilih foto dokumentasi serah-terima pangan."
       }
     },
     "android": {
@@ -23,7 +25,8 @@
       },
       "permissions": [
         "ACCESS_FINE_LOCATION",
-        "ACCESS_COARSE_LOCATION"
+        "ACCESS_COARSE_LOCATION",
+        "CAMERA"
       ],
       "predictiveBackGestureEnabled": false
     },
@@ -34,7 +37,15 @@
           "locationWhenInUsePermission": "FoodBridge memerlukan akses lokasi untuk mencocokkan surplus makanan terdekat dan melacak rute pengantaran."
         }
       ],
-      "expo-font"
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "FoodBridge memerlukan akses kamera untuk mengambil foto bukti serah-terima surplus makanan dan verifikasi identitas.",
+          "photosPermission": "FoodBridge memerlukan akses galeri untuk memilih foto dokumentasi serah-terima pangan."
+        }
+      ],
+      "expo-font",
+      "expo-secure-store"
     ],
     "web": {
       "favicon": "./assets/favicon.png"

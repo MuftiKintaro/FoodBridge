@@ -15,6 +15,7 @@ interface LocationDetailCardProps {
   onSetAsTarget: (location: FoodLocation) => void;
   onClearTarget: () => void;
   onClose: () => void;
+  onOpenVerification?: (location: FoodLocation) => void;
 }
 
 export const LocationDetailCard: React.FC<LocationDetailCardProps> = ({
@@ -23,6 +24,7 @@ export const LocationDetailCard: React.FC<LocationDetailCardProps> = ({
   onSetAsTarget,
   onClearTarget,
   onClose,
+  onOpenVerification,
 }) => {
   const isDonor = location.type === 'DONOR';
   const travelEstimate = estimateCourierTravelTime(location.distanceInKm || 0);
@@ -188,8 +190,21 @@ export const LocationDetailCard: React.FC<LocationDetailCardProps> = ({
         </View>
       </ScrollView>
 
-      {/* Tombol Aksi Utama: Set Target Adaptive */}
+      {/* Tombol Aksi Utama: Set Target & Verifikasi Milestone 2 */}
       <View style={styles.actionRow}>
+        {onOpenVerification && (
+          <TouchableOpacity
+            style={styles.verifyRescueBtn}
+            onPress={() => onOpenVerification(location)}
+            activeOpacity={0.85}
+          >
+            <MaterialCommunityIcons name="shield-check" size={18} color="#FFFFFF" />
+            <Text style={styles.verifyRescueBtnText}>
+              Proses Penyelamatan & Verifikasi (Milestone 2)
+            </Text>
+          </TouchableOpacity>
+        )}
+
         {isCurrentTarget ? (
           <TouchableOpacity
             style={styles.clearTargetBtn}
@@ -509,6 +524,23 @@ const styles = StyleSheet.create({
   },
   actionRow: {
     marginTop: 6,
+    gap: 8,
+  },
+  verifyRescueBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#0F172A',
+    paddingVertical: 12,
+    borderRadius: 12,
+    gap: 8,
+    borderWidth: 1,
+    borderColor: '#334155',
+  },
+  verifyRescueBtnText: {
+    color: '#38BDF8',
+    fontSize: 13,
+    fontWeight: '800',
   },
   setTargetBtn: {
     flexDirection: 'row',

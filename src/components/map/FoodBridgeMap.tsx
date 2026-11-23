@@ -12,6 +12,7 @@ import {
   SafeAreaView,
   Platform,
   Alert,
+  TouchableOpacity,
   StatusBar as RNStatusBar,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
@@ -30,6 +31,7 @@ import { TrackingStatusBar } from './TrackingStatusBar';
 import { FilterPills } from './FilterPills';
 import { LocationDetailCard } from './LocationDetailCard';
 import { MapControls } from './MapControls';
+import { VerificationRescueModal } from '../verification/VerificationRescueModal';
 
 export const FoodBridgeMap: React.FC = () => {
   const mapRef = useRef<MapView | null>(null);
@@ -39,6 +41,10 @@ export const FoodBridgeMap: React.FC = () => {
 
   // Lokasi yang sedang dipilih untuk melihat bottom card
   const [selectedLocation, setSelectedLocation] = useState<FoodLocation | null>(null);
+
+  // Status modal verifikasi & offline vault (Milestone 2)
+  const [isVerificationModalVisible, setIsVerificationModalVisible] = useState<boolean>(false);
+  const [verificationLocation, setVerificationLocation] = useState<FoodLocation | null>(null);
 
   // Status simulasi kecepatan kurir (untuk demonstrasi uji coba dosen)
   const [isSimulatingMovement, setIsSimulatingMovement] = useState<boolean>(false);
@@ -170,6 +176,19 @@ export const FoodBridgeMap: React.FC = () => {
     setTargetLocation(null);
   };
 
+  // Handler buka verifikasi serah-terima & offline vault (Milestone 2)
+  const handleOpenVerification = (loc: FoodLocation) => {
+    setVerificationLocation(loc);
+    setIsVerificationModalVisible(true);
+  };
+
+  // Shortcut buka modal verifikasi untuk lokasi terdekat pertama
+  const handleOpenGeneralVault = () => {
+    const targetLoc = selectedLocation || sortedLocations[0] || MOCK_FOOD_LOCATIONS[0];
+    setVerificationLocation(targetLoc);
+    setIsVerificationModalVisible(true);
+  };
+
   // Handler toggle demo mode switcher (Auto -> High Accuracy -> Battery Saver -> Auto)
   const handleToggleDemoMode = () => {
     if (!manualOverrideMode) {
@@ -205,10 +224,21 @@ export const FoodBridgeMap: React.FC = () => {
           </View>
         </View>
 
-        {/* Badge Lokasi Kota */}
-        <View style={styles.locationCityBadge}>
-          <MaterialCommunityIcons name="map-marker-radius" size={13} color="#059669" />
-          <Text style={styles.locationCityText}>Malang</Text>
+        {/* Right Header: Shortcut Offline Vault & Badge Kota */}
+        <View style={styles.headerRight}>
+          <TouchableOpacity
+            style={styles.vaultShortcutBtn}
+            onPress={handleOpenGeneralVault}
+            activeOpacity={0.8}
+          >
+            <MaterialCommunityIcons name="shield-lock-outline" size={14} color="#0284C7" />
+            <Text style={styles.vaultShortcutText}>Offline Vault</Text>
+          </TouchableOpacity>
+
+          <View style={styles.locationCityBadge}>
+            <MaterialCommunityIcons name="map-marker-radius" size={13} color="#059669" />
+            <Text style={styles.locationCityText}>Malang</Text>
+          </View>
         </View>
       </View>
 
@@ -296,9 +326,17 @@ export const FoodBridgeMap: React.FC = () => {
               onSetAsTarget={handleSetTarget}
               onClearTarget={handleClearTarget}
               onClose={() => setSelectedLocation(null)}
+              onOpenVerification={handleOpenVerification}
             />
           </View>
         )}
+
+        {/* Modal Verifikasi Serah-Terima & Offline Vault (Milestone 2) */}
+        <VerificationRescueModal
+          visible={isVerificationModalVisible}
+          location={verificationLocation}
+          onClose={() => setIsVerificationModalVisible(false)}
+        />
       </View>
     </SafeAreaView>
   );
@@ -359,6 +397,27 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#A7F3D0',
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  vaultShortcutBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#F0F9FF',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#BAE6FD',
+  },
+  vaultShortcutText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#0284C7',
   },
   locationCityText: {
     fontSize: 11,
